@@ -1,4 +1,4 @@
-GRANT ALL PRIVILEGES ON pur_beurre.* TO 'sdz'@'localhost' IDENTIFIED BY 'kcokopv6';
+-- GRANT ALL PRIVILEGES ON pur_beurre.* TO 'sdz'@'localhost' IDENTIFIED BY 'kcokopv6';
 
 CREATE DATABASE IF NOT EXISTS pur_beurre CHARACTER SET 'utf8';
 
@@ -10,7 +10,7 @@ CREATE TABLE produit(
     PROD_descr VARCHAR(150) NOT NULL,
     PROD_garde CHAR(1) NOT NULL,
     PROD_url VARCHAR(150) UNIQUE,
-    PROD_MAG_id int NOT ,
+    PROD_MAG_id int NOT NULL
 );
 
 CREATE TABLE categorie(

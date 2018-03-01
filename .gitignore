@@ -99,3 +99,8 @@ ENV/
 
 # mypy
 .mypy_cache/
+
+# my files
+
+test.py
+db_pur_beurre.sql
