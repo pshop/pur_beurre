@@ -15,4 +15,5 @@ database = UpdateDatabase(liste_de_produits)
 database.initiate_db()
 database.table_store_update()
 database.table_product_update()
-
+database.table_category_update()
+database.table_product_category_update()
