@@ -12,8 +12,13 @@ to_extract = ExtractFromJson(api_import.get_json())
 liste_de_produits = to_extract.extract_json()
 
 database = UpdateDatabase(liste_de_produits)
+    # Je crée la base si elle n'existe pas ainsi que toutes ses tables.
 database.initiate_db()
+    # Je rempli les tables
 database.table_store_update()
+    # PROBLEME de contrainte d'unicité
+    # Pourtant j'essaie de vider toutes les tables avec un TRUNCATE TABLE avant de les mettre à jour
+    # ET POUQUOI TRUNCATE TABLE ne fonctionne pas?
 database.table_product_update()
 database.table_category_update()
 database.table_product_category_update()

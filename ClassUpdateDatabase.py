@@ -8,17 +8,15 @@ class UpdateDatabase(CreateDatabase):
             self.data = data[0]
 
     def table_store_update(self):
-        """ cleans the table and update the stores """
-        self.__clean_table('store')
-        stores = []
         for product in self.data:
             for store_tag in product['stores_tags']:
-                if store_tag not in stores:
+                try:
                     self.db.query('INSERT INTO store (MAG_nom) VALUES (:store)', store = store_tag)
-                    stores.append(store_tag)
+                except:
+                    pass
 
     def table_product_update(self):
-        self.__clean_table('product')
+        #self.db.query('TRUNCATE TABLE product')
         for product in self.data:
             self.db.query('INSERT INTO product (PROD_id, PROD_name, PROD_descr, PROD_grade, PROD_url, PROD_MAG_id)\
                 VALUES(:id, :name, :descr, :grade, :link,\
@@ -33,18 +31,17 @@ class UpdateDatabase(CreateDatabase):
                 )
     
     def table_category_update(self):
-        self.__clean_table('category')
-        categories = []
         for product in self.data: 
             categories_list = product['categories'].split(',')
             for categorie in categories_list:
                 categorie = self.__clean_string(categorie)
-                if categorie not in categories:
+                try:
                     self.db.query("INSERT INTO category (CAT_nom) VALUES (:cat)", cat = categorie)
-                    categories.append(categorie)
+                except:
+                    pass
 
     def table_product_category_update(self):
-        self.__clean_table('product_category')
+        #self.db.query('TRUNCATE TABLE product_category')
         for product in self.data: 
             categories_list = product['categories'].split(',')
             for categorie in categories_list:
@@ -60,7 +57,3 @@ class UpdateDatabase(CreateDatabase):
         if str_to_clean[2] == ':':
             str_to_clean = str_to_clean[3:]
         return str_to_clean.lower()
-
-    def __clean_table(self, table_name):
-        self.db.query('TRUNCATE TABLE :table', table = table_name)
-        print('table {} vidée'.format(table_name))
