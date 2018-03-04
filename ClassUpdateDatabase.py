@@ -1,11 +1,14 @@
-from ClassCreateDatabase import CreateDatabase
+#! /usr/bin/env python3
+# coding: utf-8
 
-class UpdateDatabase(CreateDatabase):
+import records
 
-    def __init__(self, *data):
-        CreateDatabase.__init__(self)
-        if data:
-            self.data = data[0]
+class UpdateDatabase():
+
+    def __init__(self, data):
+        self.data = data
+        self.db = records.Database('mysql+pymysql://root:kcokopv6@localhost')
+        self.db.query('USE pur_beurre')
 
     def table_store_update(self):
         for product in self.data:

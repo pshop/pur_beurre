@@ -3,22 +3,17 @@
 
 class ExtractFromJson:
 
-    def __init__(self, json_data, *keys):
+    def __init__(self, json_data):
         """ For each product i'll get : id, product_name, categories, nutrition_grade, stores_tags, generic_name """
-
-        if not keys:
-            self.keys = [
-                "id",
-                "product_name",
-                "categories",
-                "nutrition_grades",
-                "stores_tags",
-                "generic_name",
-                "url"
-                ]
-        else:
-            self.keys = keys
-
+        self.keys = [
+            "id",
+            "product_name",
+            "categories",
+            "nutrition_grades",
+            "stores_tags",
+            "generic_name",
+            "url"
+            ]
         self.json_data = json_data
 
     def extract_json(self):
