@@ -3,10 +3,10 @@
 
 import records
 
-class Tables :
+class TablesCreator :
 
-    def __init__(self):
-        self.db = records.Database('mysql+pymysql://root:kcokopv6@localhost')
+    def __init__(self, db_connection):
+        self.db = db_connection
         self.db.query('USE pur_beurre')
 
     def product_create(self):
@@ -15,12 +15,8 @@ class Tables :
             PROD_name VARCHAR(100) NOT NULL,\
             PROD_descr VARCHAR(150) NOT NULL,\
             PROD_grade CHAR(1) NOT NULL,\
-            PROD_url VARCHAR(150) NOT NULL UNIQUE,\
-            PROD_MAG_id int NOT NULL)')
+            PROD_url VARCHAR(150) NOT NULL UNIQUE)')
         self.db.query('CREATE UNIQUE INDEX UI_PROD_name ON product(PROD_name)')
-        self.db.query('ALTER TABLE product\
-            ADD CONSTRAINT FK_PROD_MAG_id\
-            FOREIGN KEY (PROD_MAG_id) REFERENCES store(MAG_id) ON DELETE CASCADE')
     
     def category_create(self):
         self.db.query('CREATE TABLE IF NOT EXISTS category(\

@@ -55,3 +55,34 @@ FOREIGN KEY (PC_CAT_id) REFERENCES categorie(CAT_id);
 ALTER TABLE sauvegarde
 ADD CONSTRAINT FK_SAU_PROD_id
 FOREIGN KEY (SAU_PROD_id) REFERENCES produit(PROD_id)
+
+-- Récupérer tous les noms de produits ayant boisson pour catégorie
+SELECT product.PROD_name
+FROM product
+INNER JOIN product_category
+    ON product.PROD_id = product_category.PC_PROD_id
+INNER JOIN category
+    ON product_category.PC_CAT_id = category.CAT_id
+WHERE CAT_nom = 'boissons'
+
+-- Récupérer toutes les catégories d'un produit
+SELECT category.CAT_nom
+FROM category
+INNER JOIN product_category 
+    ON category.CAT_id = product_category.PC_CAT_id
+INNER JOIN product
+    ON product_category.PC_PROD_id = product.PROD_id
+WHERE PROD_id = 3045320517101
+
+-- sélectionner 10 produits au hasard
+SELECT PROD_id
+FROM product
+ORDER BY RAND()
+LIMIT 10;
+
+-- Ajouter 10 produits au hasard dans la table save
+INSERT INTO save (SAU_PROD_id)
+SELECT PROD_id
+FROM product
+ORDER BY RAND()
+LIMIT 10;

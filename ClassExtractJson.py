@@ -39,6 +39,7 @@ class ExtractFromJson:
                         complete = False
                         break
                 # If the dict is full i add the product to the list
-                if complete :        
+                if complete:        
                     products_list.append(temp_dict)
+
         return products_list
