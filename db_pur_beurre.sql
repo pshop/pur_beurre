@@ -99,3 +99,17 @@ WHERE PS_PROD_id NOT IN (SELECT SAU_PROD_id FROM save);
 -- Suppression directe des produits
 DELETE FROM product
 WHERE PROD_id NOT IN (SELECT SAU_PROD_id FROM save);
+
+-- Récupérer toutes les infos sur les produits de la table save
+SELECT PROD_name, PROD_descr, PROD_grade, PROD_url
+FROM product WHERE PROD_id IN (
+    SELECT SAU_PROD_id FROM save);
+
+-- Récupérer les magasins des produits sauvegardés
+SELECT category.CAT_nom
+FROM category
+INNER JOIN product_category 
+    ON category.CAT_id = product_category.PC_CAT_id
+INNER JOIN product
+    ON product_category.PC_PROD_id = product.PROD_id
+WHERE PROD_id in 

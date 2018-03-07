@@ -55,7 +55,7 @@ class Database:
         try:
             self.db.query("DELETE FROM product_category\
                 WHERE PC_PROD_id NOT IN (\
-                SELECT SAU_PROD_id FROM save);")
+                SELECT SAU_PROD_id FROM save)")
             print("product_category cleaned")
         except:
             print("un problème est survenur lors du nettoyage de product_category")
@@ -65,7 +65,7 @@ class Database:
         try:    
             self.db.query("DELETE FROM product_store\
                 WHERE PS_PROD_id NOT IN \
-                SELECT SAU_PROD_id FROM save);")
+                (SELECT SAU_PROD_id FROM save)")
             print("product_store cleaned")
         except:
             print("un problème est survenur lors du nettoyage de product_store")
@@ -74,7 +74,7 @@ class Database:
     def clean_product(self):
         try:    
             self.db.query("DELETE FROM product\
-                WHERE PROD_id NOT IN (SELECT SAU_PROD_id FROM save);")
+                WHERE PROD_id NOT IN (SELECT SAU_PROD_id FROM save)")
             print("product cleaned")
         except:
             print("un problème est survenur lors du nettoyage de product")
@@ -88,3 +88,6 @@ class Database:
             prod_name = self.db.query(
                 "SELECT PROD_name FROM product WHERE PROD_id = :id", id=id)
             print("{} est déjà dans la base".format(prod_name.export('json')))
+    
+    def get_grade_a_products(self, category):
+        print(category)
