@@ -4,7 +4,7 @@ Projet 5 OC
 IMPORTANT AJOUTER UN DOSSIER config
 dans le même répertoire ou est contenu le dossier pur_beurre,
 créer un fichier config.json sous cette forme:
-
+```json
 {
     "categories": [
         "produits-laitiers",
@@ -17,3 +17,4 @@ créer un fichier config.json sous cette forme:
     "user": "utilisateur",
     "server": "serveur"
 }
+```
