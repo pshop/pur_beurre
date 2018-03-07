@@ -86,3 +86,16 @@ SELECT PROD_id
 FROM product
 ORDER BY RAND()
 LIMIT 10;
+
+-- Supprimer les ligne de product_category ou PC_PROD_id
+-- n'est pas dans la base save
+DELETE FROM product_category
+WHERE PC_PROD_id NOT IN (SELECT SAU_PROD_id FROM save);
+
+-- Même chose pour product_store
+DELETE FROM product_store
+WHERE PS_PROD_id NOT IN (SELECT SAU_PROD_id FROM save);
+
+-- Suppression directe des produits
+DELETE FROM product
+WHERE PROD_id NOT IN (SELECT SAU_PROD_id FROM save);
