@@ -89,5 +89,16 @@ class Database:
                 "SELECT PROD_name FROM product WHERE PROD_id = :id", id=id)
             print("{} est déjà dans la base".format(prod_name.export('json')))
     
-    def get_grade_a_products(self, category):
-        print(category)
+    def get_grade_e_products(self, category):
+        """ Takes a category and return 10 random products of this category with a nutrition grade E """
+        rows = self.db.query("SELECT product.PROD_name, product.PROD_descr, product.PROD_id\
+            FROM product\
+            INNER JOIN product_category\
+            ON product.PROD_id = product_category.PC_PROD_id\
+            INNER JOIN category\
+            ON product_category.PC_CAT_id = category.CAT_id\
+            WHERE CAT_nom = :category AND PROD_grade = 'e'\
+            ORDER BY RAND()\
+            LIMIT 10;", category=category)
+
+        return rows.export('json')

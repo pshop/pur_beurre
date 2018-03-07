@@ -113,3 +113,14 @@ INNER JOIN product_category
 INNER JOIN product
     ON product_category.PC_PROD_id = product.PROD_id
 WHERE PROD_id in 
+
+-- Récupérer 10 produits au hasard de la catégorie donnée et de note E
+SELECT product.PROD_name, product.PROD_descr, product.PROD_id
+FROM product
+INNER JOIN product_category
+    ON product.PROD_id = product_category.PC_PROD_id
+INNER JOIN category
+    ON product_category.PC_CAT_id = category.CAT_id
+WHERE CAT_nom = 'boissons' AND PROD_grade = 'e'
+ORDER BY RAND()
+LIMIT 10;

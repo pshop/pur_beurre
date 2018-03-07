@@ -76,9 +76,22 @@ class AppPurBeurre:
             self.show_category_menu() 
 
     def show_category_products(self, usr_input):
-        
-        print("Veuillez sélectionner un produit de la catégorie {}".format(self.config["categories"][usr_input]))
-        self.pur_beurre.get_grade_a_products(self.config["categories"][usr_input])
+
+        category = self.config["categories"][usr_input]
+        prod_nb = 0
+        user_input = None
+
+        request_result = self.pur_beurre.get_grade_e_products(category)
+        request_json = json.loads(request_result)
+        os.system('cls' if os.name == 'nt' else 'clear')
+
+        print("Veuillez sélectionner un produit de la catégorie {}".format(category))
+        print("Entrez le numéro associé et trouvez un aliement de substitution plus saint:")
+        for product in request_json:
+            print("{num} : {prod_name}".format(num =prod_nb, prod_name=product["PROD_name"]))
+            prod_nb += 1
+
+        user_input = input(">")
 
 
         
@@ -87,6 +100,7 @@ def main(arg):
     new_session = AppPurBeurre(arg)
     user_input = new_session.show_category_menu()
     new_session.show_category_products(user_input)
+
 
 if __name__ == '__main__':
     main(sys.argv)
