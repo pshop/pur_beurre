@@ -121,6 +121,19 @@ INNER JOIN product_category
     ON product.PROD_id = product_category.PC_PROD_id
 INNER JOIN category
     ON product_category.PC_CAT_id = category.CAT_id
-WHERE CAT_nom = 'boissons' AND PROD_grade = 'e'
+WHERE CAT_nom = 'produits laitiers' AND PROD_grade = 'e'
 ORDER BY RAND()
 LIMIT 10;
+
+-- Récupérer toutes les catégories associées à un produit
+SELECT PC_CAT_id
+    FROM product_category
+WHERE PC_PROD_id = 5410041134803;
+
+SELECT product.PROD_name, product.PROD_descr, product.PROD_id
+FROM product
+INNER JOIN product_category
+    ON product.PROD_id = product_category.PC_PROD_id
+INNER JOIN category
+    ON product_category.PC_CAT_id = category.CAT_id
+WHERE CAT_nom = 'boissons' AND PROD_grade = 'a';

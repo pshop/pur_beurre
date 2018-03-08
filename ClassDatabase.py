@@ -2,6 +2,7 @@
 # coding: utf-8
 import records
 import sys
+import json
 
 from ClassTablesCreator import TablesCreator
 from ClassImportFromAPI import ImportFromApi
@@ -25,7 +26,8 @@ class Database:
 
     def create_base(self):
         """ Creates the database if it doesn't exist """
-        self.db.query('CREATE DATABASE IF NOT EXISTS pur_beurre')
+        self.db.query(
+            'CREATE DATABASE IF NOT EXISTS pur_beurre CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci')
 
     def create_tables(self):
         """ Create all the tables needed """
@@ -62,7 +64,7 @@ class Database:
             print("Erreur :", sys.exc_info()[0])
 
     def clean_product_store(self):
-        try:    
+        try:
             self.db.query("DELETE FROM product_store\
                 WHERE PS_PROD_id NOT IN \
                 (SELECT SAU_PROD_id FROM save)")
@@ -72,7 +74,7 @@ class Database:
             print("Erreur :", sys.exc_info()[0])
 
     def clean_product(self):
-        try:    
+        try:
             self.db.query("DELETE FROM product\
                 WHERE PROD_id NOT IN (SELECT SAU_PROD_id FROM save)")
             print("product cleaned")
@@ -88,7 +90,7 @@ class Database:
             prod_name = self.db.query(
                 "SELECT PROD_name FROM product WHERE PROD_id = :id", id=id)
             print("{} est déjà dans la base".format(prod_name.export('json')))
-    
+
     def get_grade_e_products(self, category):
         """ Takes a category and return 10 random products of this category with a nutrition grade E """
         rows = self.db.query("SELECT product.PROD_name, product.PROD_descr, product.PROD_id\
@@ -101,4 +103,42 @@ class Database:
             ORDER BY RAND()\
             LIMIT 10;", category=category)
 
-        return rows.export('json')
+        return json.loads(rows.export('json'))
+    
+    def get_grade_a_products_id(self, category):
+        """ returns all the garde A products from the given category """
+        rows = self.db.query("SELECT product.PROD_id\
+            FROM product\
+            INNER JOIN product_category\
+            ON product.PROD_id = product_category.PC_PROD_id\
+            INNER JOIN category\
+            ON product_category.PC_CAT_id = category.CAT_id\
+            WHERE CAT_nom = :category AND PROD_grade = 'a'",
+            category=category)
+        return json.loads(rows.export('json'))
+
+    def get_product_categories_id(self, product_id):
+        """ Returns a list of categories of a product """
+        rows = self.db.query("SELECT PC_CAT_id FROM product_category\
+            WHERE PC_PROD_id = :prod_id",
+            prod_id=product_id)
+        return json.loads(rows.export('json'))
+
+    def get_prod_id_by_name(self, name):
+        """gets the name of a product, return the id"""
+        rows = self.db.query("SELECT PROD_id FROM product\
+            WHERE PROD_name = :name",
+            name=name)
+        return json.loads(rows.export('json'))
+
+    def get_best_match(self, prod_id, cat_name):
+        pass
+        # Je crée une liste PROD_id
+        # Le PROD_id 0 est celui sélectionné par l'utilisateur
+        # Les PROD suivants sont les grade A de la même CAT
+        # 
+        # Je crée une liste_set
+        # Chaque set() est la liste des CAT_id des PROD de la liste
+        # Je compare les sets avec liste_set[0] ( set(a) & set(b) )
+        # J'enregistre les index des PROD avec le nb d'occurences max
+        # S'il y a plusieurs set pertinents j'en revoie un au hasard
