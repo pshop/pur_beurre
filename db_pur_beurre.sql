@@ -74,6 +74,15 @@ INNER JOIN product
     ON product_category.PC_PROD_id = product.PROD_id
 WHERE PROD_id = 3045320517101
 
+-- Récupérer tous les magasins d'un produit
+SELECT store.MAG_nom
+FROM store
+INNER JOIN product_store 
+    ON store.MAG_id = product_store.PS_MAG_id
+INNER JOIN product
+    ON product_store.PS_PROD_id = product.PROD_id
+WHERE PROD_id = 3045320517101;
+
 -- sélectionner 10 produits au hasard
 SELECT PROD_id
 FROM product
@@ -126,8 +135,8 @@ ORDER BY RAND()
 LIMIT 10;
 
 -- Récupérer toutes les catégories associées à un produit
-SELECT PC_CAT_id
-    FROM product_category
+SELECT product_category.PC_CAT_id
+FROM product_category
 WHERE PC_PROD_id = 5410041134803;
 
 SELECT product.PROD_name, product.PROD_descr, product.PROD_id

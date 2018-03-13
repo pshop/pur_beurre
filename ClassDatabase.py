@@ -3,6 +3,7 @@
 import records
 import sys
 import json
+import random
 
 from ClassTablesCreator import TablesCreator
 from ClassImportFromAPI import ImportFromApi
@@ -52,7 +53,7 @@ class Database:
         self.fill_in_db.table_product_store_update()
 
     def clean_product_category(self):
-        """ Deletes relations product_category and product_store witch are not
+        """ Deletes relations product_category witch are not
         linked to saved products. Then delete all the non-saved products """
         try:
             self.db.query("DELETE FROM product_category\
@@ -64,6 +65,8 @@ class Database:
             print("Erreur :", sys.exc_info()[0])
 
     def clean_product_store(self):
+        """ Deletes relations product_store witch are not
+        linked to saved products. Then delete all the non-saved products """
         try:
             self.db.query("DELETE FROM product_store\
                 WHERE PS_PROD_id NOT IN \
@@ -74,6 +77,8 @@ class Database:
             print("Erreur :", sys.exc_info()[0])
 
     def clean_product(self):
+        """ Deletes all the entries in the product table except prodcuts with their
+        PROD_id in the save table """
         try:
             self.db.query("DELETE FROM product\
                 WHERE PROD_id NOT IN (SELECT SAU_PROD_id FROM save)")
@@ -82,7 +87,7 @@ class Database:
             print("un problème est survenur lors du nettoyage de product")
             print("Erreur :", sys.exc_info()[0])
 
-    def save(self, id):
+    def save_product(self, id):
         """ Gets a PROD_id and add it to the save table """
         try:
             self.db.query("INSERT INTO save VALUES (:id)", id=id)
@@ -90,6 +95,14 @@ class Database:
             prod_name = self.db.query(
                 "SELECT PROD_name FROM product WHERE PROD_id = :id", id=id)
             print("{} est déjà dans la base".format(prod_name.export('json')))
+
+    def delete_from_save(self, prod_id):
+        """ deletes a product from the table save """
+        try:
+            self.db.query("DELETE FROM save\
+            WHERE SAU_PROD_id = :id", id=prod_id)
+        except:
+            input("une erreur est survenue")
 
     def get_grade_e_products(self, category):
         """ Takes a category and return 10 random products of this category with a nutrition grade E """
@@ -104,7 +117,7 @@ class Database:
             LIMIT 10;", category=category)
 
         return json.loads(rows.export('json'))
-    
+
     def get_grade_a_products_id(self, category):
         """ returns all the garde A products from the given category """
         rows = self.db.query("SELECT product.PROD_id\
@@ -114,31 +127,66 @@ class Database:
             INNER JOIN category\
             ON product_category.PC_CAT_id = category.CAT_id\
             WHERE CAT_nom = :category AND PROD_grade = 'a'",
-            category=category)
+                             category=category)
         return json.loads(rows.export('json'))
 
-    def get_product_categories_id(self, product_id):
+    def get_cat_id_list(self, product_id):
         """ Returns a list of categories of a product """
         rows = self.db.query("SELECT PC_CAT_id FROM product_category\
             WHERE PC_PROD_id = :prod_id",
-            prod_id=product_id)
+                             prod_id=product_id)
         return json.loads(rows.export('json'))
 
     def get_prod_id_by_name(self, name):
         """gets the name of a product, return the id"""
         rows = self.db.query("SELECT PROD_id FROM product\
             WHERE PROD_name = :name",
-            name=name)
+                             name=name)
         return json.loads(rows.export('json'))
 
-    def get_best_match(self, prod_id, cat_name):
-        pass
-        # Je crée une liste PROD_id
-        # Le PROD_id 0 est celui sélectionné par l'utilisateur
-        # Les PROD suivants sont les grade A de la même CAT
-        # 
-        # Je crée une liste_set
-        # Chaque set() est la liste des CAT_id des PROD de la liste
-        # Je compare les sets avec liste_set[0] ( set(a) & set(b) )
-        # J'enregistre les index des PROD avec le nb d'occurences max
-        # S'il y a plusieurs set pertinents j'en revoie un au hasard
+    def get_best_match(self, prod_id, cat_id):
+        """ gets a grade E product PROD_id and his main category CAT_id
+        returns a PROD_id of a grade A product with the most similar categories """
+        prod_id_list = []
+        liste_set = []
+        matches_list = []
+
+        prod_id_list.append(prod_id)
+
+        for item in (self.get_grade_a_products_id(cat_id)):
+            prod_id_list.append(item["PROD_id"])
+            
+        for prod_id in prod_id_list:
+            cat_id_set = set()
+            for cat_id in (self.get_cat_id_list(prod_id)):
+                cat_id_set.add(cat_id["PC_CAT_id"])
+            liste_set.append(cat_id_set)
+
+        for loop in range(1, len(liste_set)):
+            matches_list.append(len(set(liste_set[0] & set(liste_set[loop]))))
+        max_matches = max(matches_list)
+
+        index_matches = [i+1 for i in range(len(matches_list)) if matches_list[i] == max_matches]
+
+        return prod_id_list[random.choice(index_matches)]
+
+    def get_prod_by_id(self, prod_id):
+        """ gets all the infomations about a product from the product table """
+        rows = self.db.query("SELECT * FROM product WHERE PROD_id = :id", id=prod_id)
+        return json.loads(rows.export('json'))
+
+    def get_stores_by_prod_id(self, prod_id):
+        """ gets all the stores associated to a product """
+        rows = self.db.query("SELECT store.MAG_nom\
+            FROM store\
+            INNER JOIN product_store\
+                ON store.MAG_id = product_store.PS_MAG_id\
+            INNER JOIN product\
+                ON product_store.PS_PROD_id = product.PROD_id\
+            WHERE PROD_id = :id", id=prod_id)
+        return json.loads(rows.export('json'))
+
+    def get_fav(self):
+        """ Retruns the list of SAU_PROD_id from the save table """
+        rows = self.db.query("SELECT SAU_PROD_id FROM save")
+        return json.loads(rows.export('json'))

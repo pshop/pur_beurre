@@ -57,25 +57,25 @@ class AppPurBeurre:
 
     def show_category_menu(self):
         """ Shows to the user the available categories an get his choice """
-        cat_num = 0
-        user_input = None
+        while True:
+            cat_num = 0
+            user_input = None
 
-        os.system('cls' if os.name == 'nt' else 'clear')
+            os.system('cls' if os.name == 'nt' else 'clear')
 
-        print("Bienvenu sur l'app de Pur Beurre")
-        print("Entrez un chiffre correspondant à la catégorie que vous souhaitez explorer")
-        for category in self.config["categories"]:
-            print("Pour la catégorie {} tapez {}".format(category, cat_num))
-            cat_num += 1
-        user_input = input(">")
+            print("Bienvenu sur l'app de Pur Beurre")
+            print("Entrez un chiffre correspondant à la catégorie que vous souhaitez explorer")
+            for category in self.config["categories"]:
+                print("Pour la catégorie {} tapez {}".format(category, cat_num))
+                cat_num += 1
+            print("Pour consulter votre liste de produits favorits tapez '5'")
+            user_input = input(">")
 
-        try:
-            if int(user_input) >= 0 and int(user_input) <= cat_num:
-                return int(user_input)
-            else:
-                self.show_category_menu()
-        except:
-            self.show_category_menu()
+            try :
+                if int(user_input) >= 0 and int(user_input) <= cat_num:
+                    return int(user_input)
+            except:
+                pass
 
     def show_category_products(self, usr_input_category):
         """ Shows to user 10 grade E products of the given category """
@@ -107,18 +107,88 @@ class AppPurBeurre:
 
     def show_best_match(self, product_id, category_index):
 
-        request_json = self.pur_beurre.get_best_match(product_id, self.config["categories"][category_index])
+        os.system('cls' if os.name == 'nt' else 'clear')
+        best_match_id = self.pur_beurre.get_best_match(product_id, self.config["categories"][category_index])
+
+        grade_e_prod = self.pur_beurre.get_prod_by_id(product_id)
+        match_prod = self.pur_beurre.get_prod_by_id(best_match_id)
+        match_prod_store = self.pur_beurre.get_stores_by_prod_id(best_match_id)
+
+        print("En replacement de \'{name}\' nous vous conseillons le produit suivant:\n".format(name = grade_e_prod[0]["PROD_name"]))
+        print("{name} :\n{descr}\n".format(name = match_prod[0]["PROD_name"], descr=match_prod[0]["PROD_descr"]))
+        print("Ce produit a une note nutritionelle {note}\n".format(note=match_prod[0]["PROD_grade"]))
+        print("Vous pouvez vous le procurer dans les magasins suivants :")
+        for mag in match_prod_store:
+            print("\t{}".format(mag["MAG_nom"]))
+        print("Lien vers la fiche du produit :\n{url}".format(url = match_prod[0]["PROD_url"]))
+
+        self.show_save_product(match_prod[0]["PROD_id"])
+
+
+    def show_save_product(self, product_id):
+        user_input = None
+
+        print("Pour enregistrer ce produit dans vos favorits entrez 's'")
+        print("pour revenir au menu appuyez sur n'importe quelle touche:")
+        user_input = input(">")
+
+        if user_input.lower() == 's':
+            self.pur_beurre.save_product(product_id)
+        # else:
+        #     self.show_save_product(product_id)
+
+    def show_fav(self):
+        """ Prints all the fav products saved by the user
+        he also can select a product an delete it """
+        while True:
+            os.system('cls' if os.name == 'nt' else 'clear')
+            user_input = None
+            i = 0
+            fav_prod_list = self.pur_beurre.get_fav()
+
+            print("Pour supprimer un produit de vos favorits,")
+            print("entrez le numéro correspondant au produit\n")
+            for prod_id in fav_prod_list:
+                prod = self.pur_beurre.get_prod_by_id(prod_id["SAU_PROD_id"])
+                prod_store =  self.pur_beurre.get_stores_by_prod_id(prod_id["SAU_PROD_id"])
+                print("{i} :\n{name}".format(i=i,name=prod[0]["PROD_name"]))
+                print(prod[0]["PROD_descr"])
+                print("{url}".format(url=prod[0]["PROD_url"]))
+                print("Est vendu dans les enseignes suivantes :")
+                for mag in prod_store:
+                    print(mag["MAG_nom"], '')
+                print()
+                i+=1
+            user_input = input("Entrez un numéro de produit\nou tapez sur n'importe quelle touche pour quitter >")
+            try:
+                if int(user_input) >=0 and int(user_input) <=i:
+                    self.pur_beurre.delete_from_save(fav_prod_list[int(user_input)]["SAU_PROD_id"])
+            except:
+                break
+        
+
+    
+
+
+
+
 
 def main(argv):
-    # Stars a new session setup the database / update it if asked
+    # Starts a new session setup the database / update it if asked
     new_session = AppPurBeurre(argv)
-    # # Shows the category menu / returns the chosen category
-    # category_index_input = new_session.show_category_menu()
-    # # Shows grade E products from the selected category / returns the chosen product
-    # product_id_input = new_session.show_category_products(category_index_input)
-    # # Shows the matching grade A product
-    # new_session.show_best_match(product_id_input[0]["PROD_id"], category_index_input)
-    new_session.show_best_match(3551720003941, 1)
+
+    while True:
+        # Shows the category menu / returns the chosen category
+        # and asks the user to press f to consult his favorite products
+        category_index_input = new_session.show_category_menu()
+        if category_index_input == 5:
+            new_session.show_fav()
+        else:
+        # Shows grade E products from the selected category / returns the chosen product
+            product_id_input = new_session.show_category_products(category_index_input)
+        # Shows the matching grade A product
+            new_session.show_best_match(product_id_input[0]["PROD_id"], category_index_input)
+            continue
 
 if __name__ == '__main__':
     main(sys.argv)
