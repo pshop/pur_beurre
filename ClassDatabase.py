@@ -12,7 +12,7 @@ from ClassDatabaseCreator import DatabaseCreator
 
 
 class Database:
-
+    """ With this class i make all the needed requests to the database """
     def __init__(self, usr, pswd, server):
         self.db = None
         self.usr = usr

@@ -68,6 +68,7 @@ class DatabaseCreator():
                     pass
 
     def __clean_string(self, str_to_clean):
+        """ cleans the strings from the API by deleting things like country id """
         if str_to_clean[:1] == " ":
             str_to_clean = str_to_clean[1:]
         if str_to_clean[2] == ':':

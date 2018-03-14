@@ -8,7 +8,7 @@ from ClassDatabase import Database
 
 
 class AppPurBeurre:
-
+    """ Manages the user interface and connection to the database """
     def __init__(self, arg):
 
         try:
@@ -106,6 +106,7 @@ class AppPurBeurre:
             self.show_category_products(usr_input_category)
 
     def show_best_match(self, product_id, category_index):
+        """ Will show the most pertinent product and all the informations about it stored in the database """
 
         os.system('cls' if os.name == 'nt' else 'clear')
         best_match_id = self.pur_beurre.get_best_match(product_id, self.config["categories"][category_index])
@@ -126,6 +127,7 @@ class AppPurBeurre:
 
 
     def show_save_product(self, product_id):
+        """ Displays the list of saved products and allows the user to delete them """
         user_input = None
 
         print("Pour enregistrer ce produit dans vos favorits entrez 's'")

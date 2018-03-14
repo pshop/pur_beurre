@@ -1,5 +1,3 @@
--- GRANT ALL PRIVILEGES ON pur_beurre.* TO 'sdz'@'localhost' IDENTIFIED BY 'kcokopv6';
-
 CREATE DATABASE IF NOT EXISTS pur_beurre CHARACTER SET 'utf8';
 
 USE pur_beurre;
