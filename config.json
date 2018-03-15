@@ -1,0 +1,12 @@
+{
+    "categories": [
+        "produits laitiers",
+        "boissons",
+        "desserts",
+        "plats préparés",
+        "snacks sucrés"
+    ],
+    "password" : "PASSWORD",
+    "user": "USER",
+    "server": "localhost"
+}
