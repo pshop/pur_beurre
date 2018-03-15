@@ -21,8 +21,11 @@ class Database:
 
     def connect(self):
         """ Create a connection to the database """
-        self.db = records.Database(
-            'mysql+pymysql://{}:{}@{}'.format(self.usr, self.pswd, self.server))
+        try:
+            self.db = records.Database(
+                'mysql+pymysql://{}:{}@{}'.format(self.usr, self.pswd, self.server))
+        except:
+            print("Problème de connection veuillez vérifier votre fichier config.json")
         self.db.query('USE pur_beurre')
 
     def create_base(self):

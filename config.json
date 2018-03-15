@@ -6,7 +6,7 @@
         "plats préparés",
         "snacks sucrés"
     ],
-    "password" : "PASSWORD",
-    "user": "USER",
+    "user": "paul",
+    "password" : "test",
     "server": "localhost"
 }
