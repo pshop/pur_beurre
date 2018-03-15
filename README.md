@@ -2,13 +2,17 @@
 Projet 5 OC
 
 1. Make sure that python 3 and pip are properly installed on your computer.
-    If you need help you should check this [Properly Installing Python](http://docs.python-guide.org/en/latest/starting/installation/)
-    * Then install pipenv : `pip install --user pipenv`
+    * If you need help you should check this [Properly Installing Python](http://docs.python-guide.org/en/latest/starting/installation/)
+1. Then install pipenv if not already installed `pip install --user pipenv`
+    * If you need help : [Pipenv & Virtual Environments](http://docs.python-guide.org/en/latest/dev/virtualenvs/)
+1. If not installed, [install mysql](https://openclassrooms.com/courses/administrez-vos-bases-de-donnees-avec-mysql/installation-de-mysql):
+    * Connect to mysql and write : ```sql GRANT ALL PRIVILEGES ON pur_beurre.* TO 'USERNAME'@'localhost' IDENTIFIED BY 'PASSWORD';```
+
+### Now you have all you need to run the script
+
     * Clone the [github repository](https://github.com/pshop/pur_beurre) on your computer
     * Then `cd pur_beurre`
-    * Install the needed packages with: `pipenv install -p`
-1. If not installed, [install mysql](https://openclassrooms.com/courses/administrez-vos-bases-de-donnees-avec-mysql/installation-de-mysql)
-    * Create a new user to connect with the base : ```sql GRANT ALL PRIVILEGES ON pur_beurre.* TO 'USERNAME'@'localhost' IDENTIFIED BY 'PASSWORD';```
+    * And init the pipenv `pipenv install`, note that it will install all the needed libraries and modules
     * Modify the **config.json** file, it has to be like this:
         ```json
         {
@@ -24,7 +28,7 @@ Projet 5 OC
             "server": "localhost"
         }
         ```
-1. Run the script with `pipenv run python3 main.py`
+    **Run the script** with `pipenv run python3 main.py`
     * If this is the fun time you run the app you might have to wait a little before the menu appears.
     It is because the database is updating for the first time.
     * It is possible to update the databse when you want by running `python3 main.py -update`
