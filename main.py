@@ -17,7 +17,7 @@ class AppPurBeurre:
             self.arg = None
 
         # I get the config file with categories and login info for the database
-        with open("../config/config.json") as f:
+        with open("./config.json") as f:
             self.config = json.load(f)
 
         # New instance of the databse
