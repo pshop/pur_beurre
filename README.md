@@ -10,26 +10,26 @@ Projet 5 OC
 
 ### Now you have all you need to run the script
 
-    * Clone the [github repository](https://github.com/pshop/pur_beurre) on your computer
-    * Then `cd pur_beurre`
-    * And init the pipenv `pipenv install`, note that it will install all the needed libraries and modules
-    * Modify the **config.json** file, it has to be like this:
-        ```json
-        {
-            "categories": [
-                "produits-laitiers",
-                "boissons",
-                "desserts",
-                "plats-prepares",
-                "snacks-sucres"
-            ],
-            "password" : "PASSWORD",
-            "user": "USERNAME",
-            "server": "localhost"
-        }
-        ```
-    **Run the script** with `pipenv run python3 main.py`
-    * If this is the fun time you run the app you might have to wait a little before the menu appears.
-    It is because the database is updating for the first time.
-    * It is possible to update the databse when you want by running `python3 main.py -update`
-    This wont affect the products you saved and this cant be usefull if you want to change the categories from the **config.json** file
+* Clone the [github repository](https://github.com/pshop/pur_beurre) on your computer
+* Then `cd pur_beurre`
+* And init the pipenv `pipenv install`, note that it will install all the needed libraries and modules
+* Modify the **config.json** file, it has to be like this:
+    ```json
+    {
+        "categories": [
+            "produits-laitiers",
+            "boissons",
+            "desserts",
+            "plats-prepares",
+            "snacks-sucres"
+        ],
+        "password" : "PASSWORD",
+        "user": "USERNAME",
+        "server": "localhost"
+    }
+    ```
+**Run the script** with `pipenv run python3 main.py`
+* If this is the fun time you run the app you might have to wait a little before the menu appears.
+It is because the database is updating for the first time.
+* It is possible to update the databse when you want by running `python3 main.py -update`
+This wont affect the products you saved and this cant be usefull if you want to change the categories from the **config.json** file
