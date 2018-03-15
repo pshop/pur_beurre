@@ -24,8 +24,8 @@ Projet 5 OC
             "plats préparés",
             "snacks sucrés"
         ],
-        "password" : "PASSWORD",
         "user": "USER",
+        "password" : "PASSWORD",
         "server": "localhost"
     }
     ```
