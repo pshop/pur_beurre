@@ -79,31 +79,30 @@ class AppPurBeurre:
 
     def show_category_products(self, usr_input_category):
         """ Shows to user 10 grade E products of the given category """
-        category = self.config["categories"][usr_input_category]
-        prod_nb = 0
-        user_input_product = None
+        while True:
+            category = self.config["categories"][usr_input_category]
+            prod_nb = 0
+            user_input_product = None
 
-        request_json = self.pur_beurre.get_grade_e_products(category)
-        os.system('cls' if os.name == 'nt' else 'clear')
+            request_json = self.pur_beurre.get_grade_e_products(category)
+            os.system('cls' if os.name == 'nt' else 'clear')
 
-        print("Veuillez sélectionner un produit de la catégorie {}".format(category))
-        print("Entrez le numéro associé et trouvez un aliement de substitution plus saint:")
+            print("Veuillez sélectionner un produit de la catégorie {}".format(category))
+            print("Entrez le numéro associé et trouvez un aliement de substitution plus saint:")
 
-        for product in request_json:
-            print("{num} : {prod_name}".format(
-                num=prod_nb, prod_name=product["PROD_name"]))
-            print("    {descr}\n".format(descr=product["PROD_descr"]))
-            prod_nb += 1
+            for product in request_json:
+                print("{num} : {prod_name}".format(
+                    num=prod_nb, prod_name=product["PROD_name"]))
+                print("    {descr}\n".format(descr=product["PROD_descr"]))
+                prod_nb += 1
 
-        user_input_product = input(">")
+            user_input_product = input(">")
 
-        try:
-            if int(user_input_product) >= 0 and int(user_input_product) <= prod_nb:         
-                return self.pur_beurre.get_prod_id_by_name(request_json[int(user_input_product)]["PROD_name"])
-            else:
-                self.show_category_products(usr_input_category)
-        except:
-            self.show_category_products(usr_input_category)
+            try:
+                if int(user_input_product) >= 0 and int(user_input_product) <= prod_nb:         
+                    return self.pur_beurre.get_prod_id_by_name(request_json[int(user_input_product)]["PROD_name"])
+            except:
+                pass
 
     def show_best_match(self, product_id, category_index):
         """ Will show the most pertinent product and all the informations about it stored in the database """

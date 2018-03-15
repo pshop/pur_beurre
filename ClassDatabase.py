@@ -20,9 +20,12 @@ class Database:
         self.server = server
 
     def connect(self):
-        """ Create a connection to the database """
-        self.db = records.Database(
-            'mysql+pymysql://{}:{}@{}'.format(self.usr, self.pswd, self.server))
+        """ Create a connexion to the database """
+        try:
+            self.db = records.Database(
+                'mysql+pymysql://{}:{}@{}'.format(self.usr, self.pswd, self.server))
+        except:
+            print("Les informations de connexion son erronées:\nVérifiez votre fichier config.json")
         self.db.query('USE pur_beurre')
 
     def create_base(self):
