@@ -17,6 +17,8 @@ class ExtractFromJson:
         self.json_data = json_data
 
     def extract_json(self):
+        """ Gets the brut data in the JSON returned by the API and creates a new JSON
+        with only the needed data for my pur_beurre database """
         # list of products, will be return
         products_list = []
         black_list = []

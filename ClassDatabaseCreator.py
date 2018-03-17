@@ -3,14 +3,15 @@
 
 import records
 
-class DatabaseCreator():
-
+class DatabaseUpdator():
+    """ Has a method to update every table of the Base """
     def __init__(self, data, db_connection):
         self.data = data
         self.db = db_connection
         self.db.query('USE pur_beurre')
 
     def table_store_update(self):
+        """ Inserts unique stores name in table store """
         for product in self.data:
             for store_tag in product['stores_tags']:
                 try:
@@ -19,6 +20,7 @@ class DatabaseCreator():
                     pass
 
     def table_product_update(self):
+        """ Inserts products in product table """
         for product in self.data:
             try:
                 self.db.query('INSERT INTO product (PROD_id, PROD_name, PROD_descr, PROD_grade, PROD_url)\
@@ -33,6 +35,7 @@ class DatabaseCreator():
                 pass
     
     def table_category_update(self):
+        """ Inserts categories in category table """
         for product in self.data: 
             categories_list = product['categories'].split(',')
             for categorie in categories_list:
@@ -43,6 +46,7 @@ class DatabaseCreator():
                     pass
 
     def table_product_category_update(self):
+        """ Inserts product / category links in product category table """
         for product in self.data: 
             categories_list = product['categories'].split(',')
             for categorie in categories_list:

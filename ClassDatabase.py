@@ -8,7 +8,7 @@ import random
 from ClassTablesCreator import TablesCreator
 from ClassImportFromAPI import ImportFromApi
 from ClassExtractJson import ExtractFromJson
-from ClassDatabaseCreator import DatabaseCreator
+from ClassDatabaseCreator import DatabaseUpdator
 
 
 class Database:
@@ -51,7 +51,7 @@ class Database:
         """ fills in the all database with products of the given category and grade """
         api_json = ImportFromApi(grade, category)
         extracted_data = ExtractFromJson(api_json.get_json())
-        self.fill_in_db = DatabaseCreator(
+        self.fill_in_db = DatabaseUpdator(
             extracted_data.extract_json(), self.db)
         self.fill_in_db.table_store_update()
         self.fill_in_db.table_product_update()
