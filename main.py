@@ -166,13 +166,6 @@ class AppPurBeurre:
                     self.pur_beurre.delete_from_save(fav_prod_list[int(user_input)]["SAU_PROD_id"])
             except:
                 break
-        
-
-    
-
-
-
-
 
 def main(argv):
     # Starts a new session setup the database / update it if asked

@@ -26,11 +26,7 @@ class Database:
                 'mysql+pymysql://{}:{}@{}'.format(self.usr, self.pswd, self.server))
         except:
             print("Les informations de connexion son erronées:\nVérifiez votre fichier config.json")
-            input()
-        try:
-            self.db.query('USE pur_beurre')
-        except:
-            pass
+        self.db.query('USE pur_beurre')
 
     def create_base(self):
         """ Creates the database if it doesn't exist """
