@@ -104,3 +104,5 @@ ENV/
 
 test.py
 db_pur_beurre.sql
+.vscode
+.DS_Store
